@@ -8,22 +8,25 @@ This data allows anyone that observes Ethereum to reconstruct the current state 
 
 ## Format
 
-The state diffs contain information on every contact whose storage was updated and additional information on contract deployments. Those differences are sent as `unit256[]` array as part of the calldata, that is encoded as follows:
+The state diffs contain information on every contact whose storage was updated and additional information on contract deployments. Those differences are sent as `unit256[]` array as part of the calldata, and are encoded as follows:
 
 - Number of cells that encode contract deployments
 - For each deployed contract, we have:
   - `contract_address` - the [address](../Contracts/contract-address) of the deployed contract
   - `contract_hash` - the [hash](../Contracts/contract-hash) of the contract
-  - `len(call_data)` - number of arguments to the contract constructor
-  - `calldata` - list of arguments to the constructors
-- Number of contracts whose stroage is updated
+  - `len(constructor_call_data)` - the number of arguments to the contract constructor
+  - `constructor_call_data` - the list of arguments to the constructor
+- Number of contracts whose storage is updated
 - For each such contract, we have:
+  - `contract_address` - the [address](../Contracts/contract-address) of the contract
   - `num_of_storage_updates` - number of storage updates
   - For each storage update:
-    - `address` - the address inside the contract's stroage where the value is updated
+    - `key` - the address inside the contract's storage where the value is updated
     - `value` - the new value
 
 ## Example
+
+Below we show an example of on chain data which was extracted from L1, and proceed to decode it according to the above format.
 
 ```json
 [
@@ -93,4 +96,4 @@ The next 4 contracts storage updates are interpreted in the same manner.
 
 ## Extract from Ethereum
 
-The data described above is sent across several Etherum transactions, each holding a part of this array as calldata. Each new StarkNet block has its associated state diff transactions. You may find the code for extracting this data from Ethereum in [Pathfinder's repo](https://github.com/eqlabs/pathfinder/blob/2fe6f549a0b8b9923ed7a21cd1a588bc571657d6/crates/pathfinder/src/ethereum/state_update/retrieve.rs). Pathfinder is the first StarkNet full node implementation, whose alpha version is planned for the begininnig of March 2022. You may also take a look at the [python script](https://github.com/eqlabs/pathfinder/blob/2fe6f549a0b8b9923ed7a21cd1a588bc571657d6/crates/pathfinder/resources/fact_retrieval.py) which extracts the same information.
+The data described above is sent across several Ethereum transactions, each holding a part of this array as calldata. Each new StarkNet block has its associated state diff transactions. You may find the code for extracting this data from Ethereum in [Pathfinder's repo](https://github.com/eqlabs/pathfinder/blob/2fe6f549a0b8b9923ed7a21cd1a588bc571657d6/crates/pathfinder/src/ethereum/state_update/retrieve.rs). Pathfinder is the first StarkNet full node implementation, whose alpha version is planned for release at the time of writing. You may also take a look at the [python script](https://github.com/eqlabs/pathfinder/blob/2fe6f549a0b8b9923ed7a21cd1a588bc571657d6/crates/pathfinder/resources/fact_retrieval.py) which extracts the same information.
