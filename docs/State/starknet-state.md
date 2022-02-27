@@ -4,13 +4,13 @@ The state of StarkNet is a mapping between addresses (251 bit field elements) an
 
 The contract state consists of:
 
-* Contract code
-* [Contract storage](../Contracts/contract-storage) (a key-value mapping where the key/values are field elements)
+- Contract code
+- [Contract storage](../Contracts/contract-storage) (a key-value mapping where the key/values are field elements)
 
 With the above definition, we can provide a brief sketch of StarkNet’s transition function. A transaction $tx$ transitions the system from state $S$ to state $S’$ if:
 
-* $tx$ is an invoke transaction, and the storage of $S’$ is the result of executing the target contract code with respect to the previous state $S$ (the arguments, contract address, and the specific entry point are part of the transaction)
-* $tx$ is a deploy transaction, and $S’$ contains the new contract’s state at the contract’s address. Additionally, the storage of $S$ is updated according to the execution of the contract’s constructor.
+- $tx$ is an invoke transaction, and the storage of $S’$ is the result of executing the target contract code with respect to the previous state $S$ (the arguments, contract address, and the specific entry point are part of the transaction)
+- $tx$ is a deploy transaction, and $S’$ contains the new contract’s state at the contract’s address. Additionally, the storage of $S$ is updated according to the execution of the contract’s constructor.
 
 ## State Commitment
 
@@ -22,9 +22,9 @@ $$
 
 Where:
 
-* $\text{contract\_hash}$ is the hash of the contract’s definition discussed [here](../Contracts/contract-hash)
-* $\text{storage\_root}$ is the root of another Merkle-Patricia tree of height 251 that is constructed from the contract’s storage
-* $h$ is the [Pedersen](../Hashing/hash-functions#pedersen-hash) hash function.
+- $\text{contract\_hash}$ is the hash of the contract’s definition discussed [here](../Contracts/contract-hash)
+- $\text{storage\_root}$ is the root of another Merkle-Patricia tree of height 251 that is constructed from the contract’s storage
+- $h$ is the [Pedersen](../Hashing/hash-functions#pedersen-hash) hash function.
 
 ### Merkle-Patricia tree
 
@@ -65,7 +65,6 @@ $$
 We now show an example of the construction of a height 3 Merkle-Patricia tree from the leaves $[0,0,1,0,0,1,0,0]$:
 
 ![trie](../../static/img/trie.png)
-
 
 Where $r=h(H(2,2,1),H((2,1,1))$. Note that in our example there is no skipping from the root (length is zero), so the final commitment to the tree will be $H((0,0,r))=r$.
 
