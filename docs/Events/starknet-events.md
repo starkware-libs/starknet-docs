@@ -43,7 +43,7 @@ The above code emits an event with two keys, the [strings](https://www.cairo-lan
 of the event that you might like to filter over in the future) and three data elments 1, 2, 3.
 
 :::tip
-When using the higher level `emit` syntax, the event's data may of of complex types, for example:
+When using the higher level `emit` syntax, the event's data may be of complex types, for example:
 
 ```js
 struct Point:
