@@ -39,8 +39,7 @@ assert data[2] = 3
 emit_event(2, keys, 3, data)
 ```
 
-The above code emits an event with two keys, the [strings](https://www.cairo-lang.org/docs/how_cairo_works/consts.html#short-string-literals) "status" and "deposit" (think of those as identifiers
-of the event that you might like to filter over in the future) and three data elments 1, 2, 3.
+The above code emits an event with two keys, the [strings](https://www.cairo-lang.org/docs/how_cairo_works/consts.html#short-string-literals) "status" and "deposit" (think of those as identifiers of the event that can be used for indexing) and three data elments 1, 2, 3.
 
 :::tip
 When using the higher level `emit` syntax, the event's data may be of complex types, for example:
@@ -103,4 +102,4 @@ Where:
 - $\text{keys\_hash}$, $\text{data\_hash}$ are the hashes of the keys list and data list correspondingly (see [array hashing](../Hashing/hash-functions#array-hashing)).
 - $h$ is the [pedersen](../Hashing/hash-functions#pedersen-hash) hash function
 
-The event hashes are eventually included in the [`event_commitment`](../Blocks/header#event_commitment) field of a block.
+The event hashes are included in the [`event_commitment`](../Blocks/header#event_commitment) field of a block.
