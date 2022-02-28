@@ -10,7 +10,7 @@ The keys can be used for indexing the events, while the data may contain any inf
 
 ## Emitting events
 
-Events can be defined in a contract using the `@event` decorator. Once an event $E$ has been defined, the compiler automatically adds the function `E.emit()`. The following example illustrates how an event is defined and then emitted:
+Events can be defined in a contract using the `@event` decorator. Once an event `E` has been defined, the compiler automatically adds the function `E.emit()`. The following example illustrates how an event is defined and emitted:
 
 ```js
 @event
@@ -22,9 +22,48 @@ end
 message_received.emit(1, 2);
 ```
 
-The emit function emits an event with a single key, which is an identifier of the event, given by $\text{sn\_keccak(event\_name)}$, where $\text{event\_name}$ is the ASCII encoding of the event’s name and $\text{sn\_keccak}$ is defined [here](../Hashing/hash-functions#starknet-keccak). To emit custom keys, one should use the low level `emit_event` [system call](https://github.com/starkware-libs/cairo-lang/blob/ed6cf8d6cec50a6ad95fa36d1eb4a7f48538019e/src/starkware/starknet/common/syscalls.cairo#L301), which takes an array of keys and an array of data as input.
+The emit function emits an event with a single key, which is an identifier of the event, given by $\text{sn\_keccak(event\_name)}$, where $\text{event\_name}$ is the ASCII encoding of the event’s name and $\text{sn\_keccak}$ is defined [here](../Hashing/hash-functions#starknet-keccak). To emit custom keys, one should use the low level `emit_event` system call:
 
-Note that the emit function may take structs or arrays (with an adjacent parameter indicating the array’s length) as arguments, which will be flattened into a single array of felts.
+```js
+from starkware.starknet.common.syscalls import emit_event
+
+# ...
+
+let (keys : felt*) = alloc()
+assert keys[0] = 'status'
+assert keys[1] = 'deposit'
+let (data : felt*) = alloc()
+assert data[0] = 1
+assert data[1] = 2
+assert data[2] = 3
+emit_event(2, keys, 3, data)
+```
+
+The above code emits an event with two keys, the [strings](https://www.cairo-lang.org/docs/how_cairo_works/consts.html#short-string-literals) "status" and "deposit" (think of those as identifiers
+of the event that you might like to filter over in the future) and three data elments 1, 2, 3.
+
+:::tip
+When using the higher level `emit` syntax, the event's data may of of complex types, for example:
+
+```js
+struct Point:
+    member x : felt
+    member y : felt
+end
+
+@event
+func message_received(arr_len : felt, arr: felt*, p: Point):
+end
+
+# ...
+
+let (data : felt*) = alloc()
+assert data[0] = 1
+assert data[1] = 2
+let p = Point(3,4)
+message_received.emit(2, data, p)
+```
+:::
 
 The emitted events are part of the [transaction receipt](../Blocks/transaction-life-cycle#transaction-receipt).
 
@@ -63,4 +102,4 @@ Where:
 - $\text{keys\_hash}$, $\text{data\_hash}$ are the hashes of the keys list and data list correspondingly (see [array hashing](../Hashing/hash-functions#array-hashing)).
 - $h$ is the [pedersen](../Hashing/hash-functions#pedersen-hash) hash function
 
-The event hashes are eventually included in the [event_commitment](../Blocks/header#event_commitment) field of a block.
+The event hashes are eventually included in the [`event_commitment`](../Blocks/header#event_commitment) field of a block.
