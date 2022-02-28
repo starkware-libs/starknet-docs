@@ -63,6 +63,7 @@ assert data[1] = 2
 let p = Point(3,4)
 message_received.emit(2, data, p)
 ```
+
 :::
 
 The emitted events are part of the [transaction receipt](../Blocks/transaction-life-cycle#transaction-receipt).
