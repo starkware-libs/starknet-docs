@@ -87,7 +87,7 @@ Whenever a transaction updates a key at the storage of some contract, the follow
 - key to update
 - new value
 
-For more information, see the exact [format](/DataAvailabilty/on-chain-data#format).
+For more information, see the exact [format](../DataAvailabilty/on-chain-data#format).
 
 Let $c_w$ denote the L1 calldata cost of a 32 byte word, measured in gas. With 16 gas per byte we have $c_w=16\cdot 32=512$.
 Consequently, the assosiated storage update fee for a transaction updating $n$ unique contracts and $m$ unique keys is:
