@@ -129,7 +129,7 @@ The fee for a transaction with:
 is given by:
 
 $$
-F = \text{gas\_price}\cdot\left(\max_k v_k w_k + 2c_w(n+m) + 3t + \sum\limits_{i=1}^t q_i\right)
+F = \text{gas\_price}\cdot\left(\max_k v_k w_k + c_w\left(2(n+m) + 3t + \sum\limits_{i=1}^t q_i\right)\right)
 $$
 
 where $w$ is the weights vector discussed above and $c_w$ is the calldata cost (in gas) per 32 byte word.
