@@ -12,10 +12,10 @@ The bridges facilitate a user’s ability to conduct their transactions with the
 
 The user calls the function `deposit` (see [ERC-20 deposit](https://github.com/starkware-libs/starkgate-contracts/blob/28f4032b101003b2c6682d753ea61c86b732012c/src/starkware/starknet/apps/starkgate/solidity/StarknetERC20Bridge.sol#L10) and [ETH deposit](https://github.com/starkware-libs/starkgate-contracts/blob/28f4032b101003b2c6682d753ea61c86b732012c/src/starkware/starknet/apps/starkgate/solidity/StarknetEthBridge.sol#L10)), supplying as parameters the recipient address on StarkNet and the amount to transfer in the case of ERC-20 token. The deposit function then:
 
-* Checks that the funds transferred are within the Alpha limitations
-* Transfers the funds from the user account to the StarkNet bridge
-* Emits a deposit event with the sender address on L1, the recipient address on L2, and the amount
-* Sends a message to the relevant L2 bridge with the amount to be transferred, and the recipient address as parameters. Note that, since every  single bridge is dedicated to one token type, the token type doesn't have to be explicit here.
+- Checks that the funds transferred are within the Alpha limitations
+- Transfers the funds from the user account to the StarkNet bridge
+- Emits a deposit event with the sender address on L1, the recipient address on L2, and the amount
+- Sends a message to the relevant L2 bridge with the amount to be transferred, and the recipient address as parameters. Note that, since every single bridge is dedicated to one token type, the token type doesn't have to be explicit here.
 
 At the end of this step (i.e., after the execution on L1) the deposit transaction is known to StarkNet’s sequencer, yet sequencers may wait for enough L1 confirmations before corresponding deposit transaction is initated on L2. At this step, the status of the deposit request will be [`NOT_RECEIVED`](../Blocks/transaction-life-cycle#not_received)
 
@@ -36,8 +36,8 @@ Once the sequencer completes the block construction, StarkNet’s provers will p
 
 To initiate a withdraw, a user calls the [`initiate_withdraw`](https://github.com/starkware-libs/starkgate-contracts/blob/28f4032b101003b2c6682d753ea61c86b732012c/src/starkware/starknet/apps/starkgate/cairo/token_bridge.cairo#L103) function on the L2 bridge contract, supplying as parameters the recipient address on Ethereum, as well as the amount to transfer. The withdraw function then:
 
-* Burns the transferred amount of tokens from the balance of the withdrawal’s initiator
-* Sends a message to the relevant L1 bridge with the amount to be transferred, and the recipient address as parameters. As before, since the bridgs are token-specific, the token itself is implicit here.
+- Burns the transferred amount of tokens from the balance of the withdrawal’s initiator
+- Sends a message to the relevant L1 bridge with the amount to be transferred, and the recipient address as parameters. As before, since the bridgs are token-specific, the token itself is implicit here.
 
 #### Step 2: The Block That Includes The Transaction Is Proved
 
@@ -55,9 +55,9 @@ Note that this step is permissionless, and may be performed by anyone. Since the
 
 In order to reduce the risks involved in using an Alpha version, StarkGate Alpha has two limitations [^1]:
 
-* The total value locked (TVL) in the bridge on L1 limits the amount of each token type. Currently, the limit is around $100k for each token.
-* The maximum amount in each transaction sent from L1 to L2 (Ethereum → StarkNet) via StarkGate is limited.
-Currently, the single transaction limit is $50.
+- The total value locked (TVL) in the bridge on L1 limits the amount of each token type. Currently, the limit is around $100k for each token.
+- The maximum amount in each transaction sent from L1 to L2 (Ethereum → StarkNet) via StarkGate is limited.
+  Currently, the single transaction limit is $50.
 
 :::info
 We plan to gradually ease these limitations and lift them completely, as confidence grows.
@@ -65,4 +65,3 @@ Changes will be updated here, stay tuned.
 :::
 
 [^1] Only relveant for Mainnet Alpha
-
