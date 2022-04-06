@@ -16,7 +16,7 @@ The only limitation on the sequencer (enforced by the StarkNet OS) is that the a
 Presently, the sequencer only takes into account L1 costs involving proof submission. There are two components affecting the L1 footprint of a transaction:
 
 - [computational complexity](./fee-mechanism#computation): the heavier the transaction, the larger its portion in the proof verification cost
-- [on chain data](./fee-mechanism#on-chain-data): L1 calldata cost originating from [data availability](../DataAvailabilty/on-chain-data) or L2→L1 messages.
+- [on chain data](./fee-mechanism#on-chain-data): L1 calldata cost originating from [data availability](../Data%20Availabilty/on-chain-data) or L2→L1 messages.
 
 ## Fee Units
 
@@ -87,7 +87,7 @@ Whenever a transaction updates a key at the storage of some contract, the follow
 - key to update
 - new value
 
-For more information, see the exact [format](../DataAvailabilty/on-chain-data#format).
+For more information, see the exact [format](../Data%20Availabilty/on-chain-data#format).
 
 Let $c_w$ denote the L1 calldata cost of a 32 byte word, measured in gas. With 16 gas per byte we have $c_w=16\cdot 32=512$.
 Consequently, the assosiated storage update fee for a transaction updating $n$ unique contracts and $m$ unique keys is:
