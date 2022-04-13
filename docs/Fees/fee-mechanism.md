@@ -1,7 +1,8 @@
 # Fee Mechanism
 
-In this section, we will review StarkNet 0.8.0 fee mechanism.
+In this section, we will review StarkNet alpha 0.8.0 fee mechanism. If you want to skip the motivation and deep dive into the mechanism, you can skip directly to the final [formula](./fee-mechanism#overall-fee).
 
+<!-- TODO(Ariel 13/04/2022): update on 0.9.0 -->
 :::info
 We will work closely with the developer community to tweak and develop the fee mechanism as StarkNet evolves.
 In order to allow backward compatibility, fees will be optional until 0.9.0.
@@ -15,8 +16,8 @@ The only limitation on the sequencer (enforced by the StarkNet OS) is that the a
 
 Presently, the sequencer only takes into account L1 costs involving proof submission. There are two components affecting the L1 footprint of a transaction:
 
-- [computational complexity](./fee-mechanism#computation): the heavier the transaction, the larger its portion in the proof verification cost
-- [on chain data](./fee-mechanism#on-chain-data): L1 calldata cost originating from [data availability](../Data%20Availabilty/on-chain-data) or L2→L1 messages.
+- [computational complexity](./fee-mechanism#computation): the heavier the transaction, the larger its portion in the proof verification cost.
+- [on chain data](./fee-mechanism#on-chain-data): L1 calldata cost originating from [data availability](../Data%20Availabilty/on-chain-data) and L2→L1 messages.
 
 ## Fee Units
 
@@ -32,7 +33,7 @@ Let’s analyze the correct metric for measuring transaction complexity. For sim
 
 Recall that a Cairo program execution yields an execution trace. When proving a StarkNet block, we aggregate all the transactions appearing in that block to the execution trace.
 
-StarkNet’s prover can provide proofs for execution traces, up to some maximal length $L$ (Derived from the specs of the proving machine and the desired proof latency). Tracking the execution trace length associated with each transaction is simple.
+StarkNet’s prover generates proofs for execution traces, up to some maximal length $L$ (Derived from the specs of the proving machine and the desired proof latency). Tracking the execution trace length associated with each transaction is simple.
 Each assertion over field elements (such as verifying addition/multiplication over the field) requires the same, constant number of trace cells (this is where our “no-builtins” assumption kicks in! Obviously Pedersen occupies more trace cells than addition). Therefore, in a world without builtins, the fee of the transaction is correlated with $\text{TraceCells}[tx]/L$.
 
 #### Adding builtins
@@ -87,6 +88,10 @@ Whenever a transaction updates a key at the storage of some contract, the follow
 - key to update
 - new value
 
+:::info
+Note that only the most recent value reaches L1. That is, the transaction's fee only depends on the number of **unique** storage updates (if the same storage cell is updated multiple times within the transaction, the fee remains that of a single update).
+:::
+
 For more information, see the exact [format](../Data%20Availabilty/on-chain-data#format).
 
 Let $c_w$ denote the L1 calldata cost of a 32 byte word, measured in gas. With 16 gas per byte we have $c_w=16\cdot 32=512$.
@@ -104,7 +109,7 @@ Note that there are many possible improvements to the above pessimistic estimati
 
 #### L2→L1 Messages
 
-When a transaction which raises the `sent_message_to_l1` syscall is included in a state update, the following data reaches L1:
+When a transaction which raises the `send_message_to_l1` syscall is included in a state update, the following data reaches L1:
 
 - l2 sender address
 - l1 destination address
@@ -117,7 +122,7 @@ $$
 \text{gas\_price}\cdot c_w\cdot(3+\text{payload\_size})
 $$
 
-### Overall Fee
+## Overall Fee
 
 The fee for a transaction with:
 
@@ -138,4 +143,5 @@ where $w$ is the weights vector discussed above and $c_w$ is the calldata cost (
 
 The fee is charged atomically with the transaction execution on L2. The StarkNet OS injects a transfer of the fee-related ERC-20, with an amount equal to the fee paid, sender equals to the transaction submitter, and the sequencer as a receiver.
 
+<!-- TODO(Ariel 13/04/2022): update on 0.9.0 -->
 Note that fees are not yet enforced at the time of writing (that is, the sequencer may include a transaction without the “max fee” field).
