@@ -12,12 +12,12 @@ The bridges facilitate a user’s ability to conduct their transactions with the
 
 The user calls the function `deposit` (see [ERC-20 deposit](https://github.com/starkware-libs/starkgate-contracts/blob/28f4032b101003b2c6682d753ea61c86b732012c/src/starkware/starknet/apps/starkgate/solidity/StarknetERC20Bridge.sol#L10) and [ETH deposit](https://github.com/starkware-libs/starkgate-contracts/blob/28f4032b101003b2c6682d753ea61c86b732012c/src/starkware/starknet/apps/starkgate/solidity/StarknetEthBridge.sol#L10)), supplying as parameters the recipient address on StarkNet and the amount to transfer in the case of ERC-20 token. The deposit function then:
 
-- Checks that the funds transferred are within the Alpha limitations
+- Checks that the funds transferred are within the Alpha [limitations](./token-bridge#starkgate-alpha-limitations)
 - Transfers the funds from the user account to the StarkNet bridge
-- Emits a deposit event with the sender address on L1, the recipient address on L2, and the amount
+- Emits a deposit [event](https://github.com/starkware-libs/starkgate-contracts/blob/28f4032b101003b2c6682d753ea61c86b732012c/src/starkware/starknet/apps/starkgate/solidity/StarknetTokenBridge.sol#L101) with the sender address on L1, the recipient address on L2, and the amount
 - Sends a message to the relevant L2 bridge with the amount to be transferred, and the recipient address as parameters. Note that, since every single bridge is dedicated to one token type, the token type doesn't have to be explicit here.
 
-At the end of this step (i.e., after the execution on L1) the deposit transaction is known to StarkNet’s sequencer, yet sequencers may wait for enough L1 confirmations before corresponding deposit transaction is initated on L2. At this step, the status of the deposit request will be [`NOT_RECEIVED`](../Blocks/transaction-life-cycle#not_received)
+At the end of this step (i.e., after the execution on L1) the deposit transaction is known to StarkNet’s sequencer, yet sequencers may wait for enough L1 confirmations before corresponding deposit transaction is initated on L2. During this step, the status of the L2 deposit transaction is [`NOT_RECEIVED`](../Blocks/transaction-life-cycle#not_received).
 
 #### Step 2: Deposit Triggered on StarkNet
 
