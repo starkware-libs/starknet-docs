@@ -53,11 +53,11 @@ Note that this step is permissionless, and may be performed by anyone. Since the
 
 ## StarkGate Alpha Limitations
 
-In order to reduce the risks involved in using an Alpha version, StarkGate Alpha has two limitations [^1]:
+In order to reduce the risks involved in using an Alpha version, StarkGate Alpha has limitations [^1] involving the deposit amount and total value locked in the L1 bridge contract:
 
-- The total value locked (TVL) in the bridge on L1 limits the amount of each token type. Currently, the limit is around $100k for each token.
-- The maximum amount in each transaction sent from L1 to L2 (Ethereum → StarkNet) via StarkGate is limited.
-  Currently, the single transaction limit is $50.
+| Token | Max deposit | Max total value locked |
+| ----- | ----------- | ---------------------- |
+| ETH   | 0.025 Eth   | 30 Eth                 |
 
 :::info
 We plan to gradually ease these limitations and lift them completely, as confidence grows.
