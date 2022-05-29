@@ -15,13 +15,14 @@ A deploy transaction has the following fields:
 | Name                    | Type                 | Description                                                                      |
 | ----------------------- | -------------------- | -------------------------------------------------------------------------------- |
 | `contract_address_salt` | `FieldElement`       | A random number used to distinguish between different instances of the contract  |
-| `contract_code`         | `FieldElement`       | A path to the json containing the contract’s definition                          |
+| `contract_definition`   | `ContractClass`      | The object definning the contract's functionality                                |
 | `constructor_calldata`  | `List<FieldElement>` | The arguments passed to the constructor during deployment                        |
 | `caller_address`        | `FieldElement`       | Who invoked the deployment. Set to 0 (in future: the deploying account contract) |
+| `version`              | `FieldElement`       | The intended StarkNet OS version                                                          |
 
 </APITable>
 
-### Transaction hash
+### Deploy Transaction hash
 
 In order to calculate the transaction hash, we first need to obtain the deployed contract address.
 
@@ -29,7 +30,7 @@ The Deploy transaction’s hash is calculated as follows:
 
 $$
 \begin{aligned}
-\text{deploy\_tx\_hash} = h( & \text{"deploy"}, \text{contract\_address}, sn\_keccak(\text{“constructor”}),\\ & h(\text{constructor\_calldata}), \text{chain\_id})
+\text{deploy\_tx\_hash} = h( & \text{"deploy"}, \text{version}, \text{contract\_address}, sn\_keccak(\text{“constructor”}),\\ & h(\text{constructor\_calldata}), 0, \text{chain\_id})
 \end{aligned}
 $$
 
@@ -38,9 +39,9 @@ Where:
 - “deploy” and “constructor” constant’s prefixes, encoded in bytes (ASCII), with big-endian.
 - $h$ is the [Pedersen](../Hashing/hash-functions#pedersen-hash) hash and $sn\_keccak$ is [StarkNet Keccak](../Hashing/hash-functions#starknet-keccak)
 - `chain_id` is a constant value specifying the network this transaction is sent to. See [below](./transactions#chain-id).
-- `contract_address` is calculated as described here.
+- `contract_address` is calculated as described [here](../Contracts/contract-address).
 
-## Invoke Function
+## Invoke Transaction
 
 The invoke function transaction is the main transaction type used to invoke contract functions in StarkNet.
 
@@ -67,7 +68,7 @@ in the StarkNet OS, we can prevent old transactions from being executed in this 
 
 :::
 
-### Transaction hash
+### Invoke Transaction hash
 
 The invoke function transaction hash is calculated as a hash over the given transaction elements, specifically:
 
@@ -83,7 +84,42 @@ Where:
 - `chain_id` is a constant value specifying the network this transaction is sent to. See [below](./transactions#chain-id).
 - $$h$$ is the [Pedersen](../Hashing/hash-functions#pedersen-hash) hash
 
-### Signature
+## Declare transaction
+
+The declare transaction is used to introduce new classes into the state of StarkNet, allowing other contracts to deploy instances of those classes or using them in a library call.
+
+A declare transaction has the following fields:
+
+<APITable>
+
+| Name             | Type                 | Description                                                                               |
+| ---------------- | -------------------- | ----------------------------------------------------------------------------------------- |
+| `contract_class` | `ContractClass`      | The class object                                                                          |
+| `sender_address` | `FieldElement`       | The address of the account initiating the transaction                                     |
+| `max_fee`        | `List<FieldElement>` | The maximum fee that the sender is willing to pay for the transaction                     |
+| `signature`      | `List<FieldElement>` | Additional information given by the caller, representing the signature of the transaction |
+| `nonce`          | `FieldElement`       | The transaction nonce                                                                     |
+| `version`        | `FieldElement`       | The intended StarkNet OS version                                                          |
+
+</APITable>
+
+### Declare Transaction Hash
+
+The declare transaction hash is calculated as a hash over the given transaction elements, specifically:
+
+$$
+\begin{aligned}
+\text{invoke\_tx\_hash} = h( & \text{"declare"}, \text{version}, \text{sender\_address}, \\& 0, 0, \text{max\_fee}, \text{chain\_id}, \text{class\_hash})
+\end{aligned}
+$$
+
+Where:
+
+- The placeholders zeros are used to align the hash computation for the different types of transactions (here, they stand for the empty call data and entry point selector)
+- `chain_id` is a constant value specifying the network this transaction is sent to. See [below](./transactions#chain-id).
+- $$h$$ is the [Pedersen](../Hashing/hash-functions#pedersen-hash) hash
+
+## Signature
 
 While StarkNet does not have a specific signature scheme built into the protocol, the Cairo language in which smart contracts are written does have an efficient implementation for ECDSA signature with respect to a [STARK-friendly curve](../Hashing/hash-functions#stark-curve).
 
@@ -94,7 +130,7 @@ $g_y=152666792071518830868575557812948353041420400780739481342941381225525861407
 
 [^1]: Note, this type of transaction may be deprecated as StarkNet matures, effectively incorporating this into an invoke function transaction over an account contract which will implement the deployment as part of its functionality.
 
-### Chain-Id
+## Chain-Id
 
 StarkNet currently supports two chain IDs. Chain IDs are given as numbers, representing an encoding of specific constants as bytes (ASCII) using big-endian, as illustrated by the following Python snippet:
 
