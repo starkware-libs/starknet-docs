@@ -18,7 +18,7 @@ A deploy transaction has the following fields:
 | `contract_definition`   | `ContractClass`      | The object definning the contract's functionality                                |
 | `constructor_calldata`  | `List<FieldElement>` | The arguments passed to the constructor during deployment                        |
 | `caller_address`        | `FieldElement`       | Who invoked the deployment. Set to 0 (in future: the deploying account contract) |
-| `version`              | `FieldElement`       | The intended StarkNet OS version                                                          |
+| `version`               | `FieldElement`       | The intended StarkNet OS version                                                 |
 
 </APITable>
 
