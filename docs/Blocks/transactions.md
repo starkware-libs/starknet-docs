@@ -6,7 +6,11 @@ StarkNet, in its Alpha version, supports two types of transactions: a `Deploy` t
 
 ## Deploy transaction
 
-A deploy transaction is a transaction type used to deploy contracts to StarkNet [^1]
+:::caution
+The deploy transaction will be deprecated in future StarkNet versions. To deploy new constract instances, you can use the `deploy` syscall. For more information, see [contract classes](../Contracts/contract-classes).
+:::
+
+A deploy transaction is a transaction type used to deploy contracts to StarkNet.
 
 A deploy transaction has the following fields:
 
@@ -18,7 +22,7 @@ A deploy transaction has the following fields:
 | `contract_definition`   | `ContractClass`      | The object that defines the contract's functionality                             |
 | `constructor_calldata`  | `List<FieldElement>` | The arguments passed to the constructor during deployment                        |
 | `caller_address`        | `FieldElement`       | Who invoked the deployment. Set to 0 (in future: the deploying account contract) |
-| `version`               | `FieldElement`       | The intended StarkNet OS version                                                 |
+| `version`               | `FieldElement`       | The transaction's version [^1]                                                   |
 
 </APITable>
 
@@ -36,6 +40,7 @@ $$
 
 Where:
 
+- The placeholder zero is used to align the hash computation for the different types of transactions (here, it holds the place of the `max_fee` field which exsists in both `invoke` and `declare` transactions)
 - “deploy” and “constructor” constant’s prefixes, encoded in bytes (ASCII), with big-endian.
 - $h$ is the [Pedersen](../Hashing/hash-functions#pedersen-hash) hash and $sn\_keccak$ is [StarkNet Keccak](../Hashing/hash-functions#starknet-keccak)
 - `chain_id` is a constant value that specifies the network to which this transaction is sent. See [Chain-Id](./transactions#chain-id).
@@ -56,7 +61,7 @@ An invoke function transaction has the following fields:
 | `calldata`             | `List<FieldElement>` | The arguments passed to the invoked function                                              |
 | `signature`            | `List<FieldElement>` | Additional information given by the caller, representing the signature of the transaction |
 | `max_fee`              | `FieldElement`       | The maximum fee that the sender is willing to pay for the transaction                     |
-| `version`              | `FieldElement`       | The intended StarkNet OS version                                                          |
+| `version`              | `FieldElement`       | The transaction's version [^1]                                                            |
 
 </APITable>
 
@@ -86,7 +91,7 @@ Where:
 
 ## Declare transaction
 
-The declare transaction is used to introduce new classes into the state of StarkNet, enabling other contracts to deploy instances of those classes or using them in a library call.
+The declare transaction is used to introduce new classes into the state of StarkNet, enabling other contracts to deploy instances of those classes or using them in a library call. For more information, see [contract classes](../contracts/contract-classes).
 
 A declare transaction has the following fields:
 
@@ -99,7 +104,7 @@ A declare transaction has the following fields:
 | `max_fee`        | `List<FieldElement>` | The maximum fee that the sender is willing to pay for the transaction                     |
 | `signature`      | `List<FieldElement>` | Additional information given by the caller, representing the signature of the transaction |
 | `nonce`          | `FieldElement`       | The transaction nonce                                                                     |
-| `version`        | `FieldElement`       | The intended StarkNet OS version                                                          |
+| `version`        | `FieldElement`       | The transaction's version [^1]                                                            |
 
 </APITable>
 
@@ -128,8 +133,6 @@ The generator used in the ECDSA algorithm is $G=\left(g_x, g_y\right)$ where:
 $g_x=874739451078007766457464989774322083649278607533249481151382481072868806602$
 $g_y=152666792071518830868575557812948353041420400780739481342941381225525861407$
 
-[^1]: Be aware that this type of transaction might be deprecated as StarkNet matures, effectively incorporating this into an invoke function transaction over an account contract which will implement the deployment as part of its functionality.
-
 ## Chain-Id
 
 StarkNet currently supports two chain IDs. Chain IDs are given as numbers, representing an encoding of specific constants as bytes (ASCII) using big-endian, as illustrated by the following Python snippet:
@@ -142,3 +145,5 @@ Two constants are currently used:
 
 - `SN_MAIN` for StarkNet’s main network.
 - `SN_GOERLI` for StarkNet's testnet.
+
+[^1]: The StarkNet OS defines the supported transaction versions (e.g. if a new field is added to the transaction, then the version is increased). A transaction whose version is not supported by the StarkNet OS can not be included in a block.
