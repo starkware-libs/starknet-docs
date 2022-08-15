@@ -8,7 +8,7 @@ StarkNet smart contracts are written in Cairo. However, Cairo is (among other th
 
 ### Send Message To L1
 
-Requests the StarkNet OS to send a message to L1. This is including the messages parameters as part of the proof's output, making them visible to the StarkNet Core contract on L1 once the state update including the transaction is received. For more information, see StarkNet's [messaging mechanism](../L1-L2%20Communication/messaging-mechanism).
+Requests the StarkNet OS to send a message to L1. This includes the message parameters as part of the proof's output, exposing them to the StarkNet Core contract on L1 once the state update, including the transaction, is received. For more information, see StarkNet's [messaging mechanism](../L1-L2%20Communication/messaging-mechanism).
 
 This system call expects the receipent address on L1 and the message payload. The send message to L1 syscall can be raised by calling the following function, which is available in [messages.cairo](https://github.com/starkware-libs/cairo-lang/blob/master/src/starkware/starknet/common/messages.cairo):
 
