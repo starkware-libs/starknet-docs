@@ -19,7 +19,11 @@ The state diffs contain information on every contact whose storage was updated a
 - Number of contracts whose storage is updated
 - For each such contract, we have:
   - `contract_address` - the [address](../Contracts/contract-address.md) of the contract
-  - `num_of_storage_updates` - number of storage updates
+  - `num_of_storage_updates | nonce ` - a uint256 that encodes both the number of storage updates for that contract and the updated nonce:
+    $$
+    \underbrace{0\cdots0}_{\text{128 bits}} | \underbrace{\text{new nonce}}_{\text{64 bits}} |
+    {\underbrace{\text{\# of storage updates}}_{\text{64 bits}}}_{\text{LSB}}
+    $$
   - For each storage update:
     - `key` - the address inside the contract's storage where the value is updated
     - `value` - the new value
@@ -38,7 +42,7 @@ Below we show an example of on chain data which was extracted from L1, and proce
   2439272289032330041885427773916021390926903450917097317807468082958581062272,
   5,
   2019172390095051323869047481075102003731246132997057518965927979101413600827,
-  1, 5, 102,
+  18446744073709551617, 5, 102,
   2111158214429736260101797453815341265658516118421387314850625535905115418634,
   2,
   619473939880410191267127038055308002651079521370507951329266275707625062498,
@@ -89,7 +93,9 @@ Below we show an example of on chain data which was extracted from L1, and proce
   ```
   2019172390095051323869047481075102003731246132997057518965927979101413600827
   ```
-  - One update (indicated by the cell at index 8):
+  - Following the above contract address, we have `18446744073709551617` (index 8 in the array), which is $2^{64}+1$, thus:
+    - The new contact nonce is 1
+    - One storage key was updated
     - The value at key 5 was changed to 102.
 
 The next 4 contracts storage updates are interpreted in the same manner.
