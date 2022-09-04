@@ -54,7 +54,6 @@ $$
 
 Where:
 
-- The placeholder zero is used to align the hash computation for the different types of transactions. Here, it holds the place of the `max_fee` field which exists in both invoke and declare transactions.
 - “deploy” and “constructor” are constant strings encoded in ASCII.
 - $h$ is the [Pedersen](../Hashing/hash-functions.md#pedersen-hash) hash and $sn\_keccak$ is [StarkNet Keccak](../Hashing/hash-functions.md#starknet-keccak)
 - `chain_id` is a constant value that specifies the network to which this transaction is sent. See [Chain-Id](./transactions.md#chain-id).
@@ -115,7 +114,6 @@ $$
 Where:
 
 - $$invoke$$ is a constant prefix string, encoded in ASCII.
-- The placeholder zero is used to align the hash computation for the different types of transactions. Here, it stands for the empty `entry point selector` field that exists in other transaction types.
 - $$chain\_id$$ is a constant value that specifies the network to which this transaction is sent. See [Chain-Id](./transactions.md#chain-id).
 - $$h$$ is the [Pedersen](../Hashing/hash-functions.md#pedersen-hash) hash
 
@@ -167,7 +165,6 @@ $$
 Where:
 
 - $$declare$$ is a constant prefix string, encoded in ASCII.
-- The placeholders zero is used to align the hash computation for the different types of transactions. Here, it holds the place of `entry_points_selector` that exists in other transaction types.
 - `class_hash` is the hash of the [contract class](../Contracts/contract-classes.md). Go [here](../Contracts/contract-hash.md) for details about how the hash is computed.
 - `chain_id` is a constant value that specifies the network to which this transaction is sent. See [Chain-Id](./transactions.md#chain-id).
 - $$h$$ is the [Pedersen](../Hashing/hash-functions.md#pedersen-hash) hash
@@ -185,7 +182,6 @@ $$
 Where:
 
 - $$declare$$ is a constant prefix string, encoded in ASCII.
-- The placeholders zeros are used to align the hash computation for the different types of transactions. Here, they stand for the empty `call_data` and `entry_point_selector` that appear in other transaction types.
 - `class_hash` is the hash of the [contract class](../Contracts/contract-classes.md). Go [here](../Contracts/contract-hash.md) for details about how the hash is computed.
 - `chain_id` is a constant value that specifies the network to which this transaction is sent. See [Chain-Id](./transactions.md#chain-id).
 - $$h$$ is the [Pedersen](../Hashing/hash-functions.md#pedersen-hash) hash
