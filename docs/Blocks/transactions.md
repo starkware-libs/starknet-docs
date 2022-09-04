@@ -55,7 +55,7 @@ $$
 Where:
 
 - The placeholder zero is used to align the hash computation for the different types of transactions. Here, it holds the place of the `max_fee` field which exists in both invoke and declare transactions.
-- “deploy” and “constructor” constant’s prefixes, encoded in bytes (ASCII), with big-endian.
+- “deploy” and “constructor” are constant strings encoded in ASCII.
 - $h$ is the [Pedersen](../Hashing/hash-functions.md#pedersen-hash) hash and $sn\_keccak$ is [StarkNet Keccak](../Hashing/hash-functions.md#starknet-keccak)
 - `chain_id` is a constant value that specifies the network to which this transaction is sent. See [Chain-Id](./transactions.md#chain-id).
 - `contract_address` is calculated as described [here](../Contracts/contract-address.md).
@@ -108,13 +108,14 @@ The hash of a v1 invoke transaction is computed as follows:
 
 $$
 \begin{aligned}
-\text{invoke\_v1\_tx\_hash} = h( & \text{``invoke"}, 1, \text{sender\_address}, 0, h(\text{calldata}), \\ & \text{max\_fee}, \text{chain\_id}, \text{nonce})
+\text{invoke\_v1\_tx\_hash} = h( & \text{``invoke"}, \text{version}, \text{sender\_address}, 0, h(\text{calldata}), \\ & \text{max\_fee}, \text{chain\_id}, \text{nonce})
 \end{aligned}
 $$
 
 Where:
 
-- $$invoke$$ is a constant prefix, encoded in bytes (ASCII), with big-endian.
+- $$invoke$$ is a constant prefix string, encoded in ASCII.
+- The placeholder zero is used to align the hash computation for the different types of transactions. Here, it stands for the empty `entry point selector` field that exists in other transaction types.
 - $$chain\_id$$ is a constant value that specifies the network to which this transaction is sent. See [Chain-Id](./transactions.md#chain-id).
 - $$h$$ is the [Pedersen](../Hashing/hash-functions.md#pedersen-hash) hash
 
@@ -124,13 +125,13 @@ The hash of a v0 invoke transaction is computed as follows:
 
 $$
 \begin{aligned}
-\text{invoke\_v0\_tx\_hash} = h( & \text{``invoke"}, 0, \text{contract\_address}, \text{entry\_point\_selector}, \\ & h(\text{calldata}), \text{max\_fee}, \text{chain\_id})
+\text{invoke\_v0\_tx\_hash} = h( & \text{``invoke"}, \text{version}, \text{contract\_address}, \text{entry\_point\_selector}, \\ & h(\text{calldata}), \text{max\_fee}, \text{chain\_id})
 \end{aligned}
 $$
 
 Where:
 
-- $$invoke$$ is a constant prefix, encoded in bytes (ASCII), with big-endian.
+- $$invoke$$ is a constant prefix string, encoded in ASCII.
 - $$chain\_id$$ is a constant value that specifies the network to which this transaction is sent. See [Chain-Id](./transactions.md#chain-id).
 - $$h$$ is the [Pedersen](../Hashing/hash-functions.md#pedersen-hash) hash
 
@@ -159,13 +160,15 @@ The hash of a v1 declare transaction is computed as follows:
 
 $$
 \begin{aligned}
-\text{declare\_v1\_tx\_hash} = h( & \text{``declare"}, 1, \text{sender\_address}, \text{class\_hash}, \text{max\_fee}, \text{chain\_id}, \text{nonce})
+\text{declare\_v1\_tx\_hash} = h( & \text{``declare"}, \text{version}, \text{sender\_address}, 0, \text{class\_hash}, \text{max\_fee}, \text{chain\_id}, \text{nonce})
 \end{aligned}
 $$
 
 Where:
 
-- The placeholders zeros are used to align the hash computation for the different types of transactions (here, they stand for the empty call data and entry point selector)
+- $$declare$$ is a constant prefix string, encoded in ASCII.
+- The placeholders zero is used to align the hash computation for the different types of transactions. Here, it holds the place of `entry_points_selector` that exists in other transaction types.
+- `class_hash` is the hash of the [contract class](../Contracts/contract-classes.md). Go [here](../Contracts/contract-hash.md) for details about how the hash is computed.
 - `chain_id` is a constant value that specifies the network to which this transaction is sent. See [Chain-Id](./transactions.md#chain-id).
 - $$h$$ is the [Pedersen](../Hashing/hash-functions.md#pedersen-hash) hash
 
@@ -175,13 +178,15 @@ The hash of a v0 declare transaction is computed as follows:
 
 $$
 \begin{aligned}
-\text{declare\_v0\_tx\_hash} = h( & \text{``declare"}, 0, \text{sender\_address}, 0, \text{max\_fee}, \text{chain\_id}, \text{class\_hash})
+\text{declare\_v0\_tx\_hash} = h( & \text{``declare"}, \text{version}, \text{sender\_address}, 0, 0, \text{max\_fee}, \text{chain\_id}, \text{class\_hash})
 \end{aligned}
 $$
 
 Where:
 
-- The placeholders zeros are used to align the hash computation for the different types of transactions (here, they stand for the empty call data and entry point selector)
+- $$declare$$ is a constant prefix string, encoded in ASCII.
+- The placeholders zeros are used to align the hash computation for the different types of transactions. Here, they stand for the empty `call_data` and `entry_point_selector` that appear in other transaction types.
+- `class_hash` is the hash of the [contract class](../Contracts/contract-classes.md). Go [here](../Contracts/contract-hash.md) for details about how the hash is computed.
 - `chain_id` is a constant value that specifies the network to which this transaction is sent. See [Chain-Id](./transactions.md#chain-id).
 - $$h$$ is the [Pedersen](../Hashing/hash-functions.md#pedersen-hash) hash
 
@@ -196,7 +201,7 @@ $g_y=152666792071518830868575557812948353041420400780739481342941381225525861407
 
 ## Chain-Id
 
-StarkNet currently supports two chain IDs. Chain IDs are given as numbers, representing an encoding of specific constants as bytes (ASCII) using big-endian, as illustrated by the following Python snippet:
+StarkNet currently supports two chain IDs. Chain IDs are given as numbers, representing the ASCII encoding of specific constant strings, as illustrated by the following Python snippet:
 
 ```python
 chain_id = int.from_bytes(value, byteorder=“big”, signed=False)
