@@ -102,13 +102,29 @@ Transaction version 0 is deprecated and will be removed in a future release of S
 
 </APITable>
 
-### Calculating the hash of an invoke transaction
+### Calculating the hash of a v1 invoke transaction
 
-The invoke transaction hash is calculated as a hash over the given transaction elements, specifically:
+The hash of a v1 invoke transaction is computed as follows:
 
 $$
 \begin{aligned}
-\text{invoke\_tx\_hash} = h( & \text{``invoke"}, \text{version}, \text{contract\_address}, \text{entry\_point\_selector}, \\ & h(\text{calldata}), \text{max\_fee}, \text{chain\_id})
+\text{invoke\_v1\_tx\_hash} = h( & \text{``invoke"}, 1, \text{sender\_address}, 0, h(\text{calldata}), \\ & \text{max\_fee}, \text{chain\_id}, \text{nonce})
+\end{aligned}
+$$
+
+Where:
+
+- $$invoke$$ is a constant prefix, encoded in bytes (ASCII), with big-endian.
+- $$chain\_id$$ is a constant value that specifies the network to which this transaction is sent. See [Chain-Id](./transactions.md#chain-id).
+- $$h$$ is the [Pedersen](../Hashing/hash-functions.md#pedersen-hash) hash
+
+### Calculating the hash of a v0 invoke transaction
+
+The hash of a v0 invoke transaction is computed as follows:
+
+$$
+\begin{aligned}
+\text{invoke\_v0\_tx\_hash} = h( & \text{``invoke"}, 0, \text{contract\_address}, \text{entry\_point\_selector}, \\ & h(\text{calldata}), \text{max\_fee}, \text{chain\_id})
 \end{aligned}
 $$
 
@@ -137,13 +153,29 @@ A declare transaction has the following fields:
 
 </APITable>
 
-### Calculating the hash of a declare transaction
+### Calculating the hash of a v1 declare transaction
 
-The declare transaction hash is calculated as a hash over the given transaction elements, specifically:
+The hash of a v1 declare transaction is computed as follows:
 
 $$
 \begin{aligned}
-\text{declare\_tx\_hash} = h( & \text{``declare"}, \text{version}, \text{sender\_address}, \\& 0, \text{class\_hash}, \text{max\_fee}, \text{chain\_id}, \text{nonce})
+\text{declare\_v1\_tx\_hash} = h( & \text{``declare"}, 1, \text{sender\_address}, \text{class\_hash}, \text{max\_fee}, \text{chain\_id}, \text{nonce})
+\end{aligned}
+$$
+
+Where:
+
+- The placeholders zeros are used to align the hash computation for the different types of transactions (here, they stand for the empty call data and entry point selector)
+- `chain_id` is a constant value that specifies the network to which this transaction is sent. See [Chain-Id](./transactions.md#chain-id).
+- $$h$$ is the [Pedersen](../Hashing/hash-functions.md#pedersen-hash) hash
+
+### Calculating the hash of a v0 declare transaction
+
+The hash of a v0 declare transaction is computed as follows:
+
+$$
+\begin{aligned}
+\text{declare\_v0\_tx\_hash} = h( & \text{``declare"}, 0, \text{sender\_address}, 0, \text{max\_fee}, \text{chain\_id}, \text{class\_hash})
 \end{aligned}
 $$
 
