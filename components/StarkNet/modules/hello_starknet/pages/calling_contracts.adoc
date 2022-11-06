@@ -7,6 +7,7 @@ Start by deploying the example contract in xref:intro.adoc[Writing StarkNet cont
 
 In order to call this contract from another contract, define an interface by copying the declarations of the external functions:
 
+[#call_contract_interface]
 [source,cairo]
 ----
 @contract_interface
@@ -23,6 +24,7 @@ Note that the body of the functions and the implicit arguments should be removed
 
 You can use `IBalanceContract.increase_balance()` and `IBalanceContract.get_balance()` to invoke these functions on another contract. For example:
 
+[#call_contract_code]
 [source,cairo]
 ----
 @external
@@ -52,6 +54,7 @@ Create a file named `proxy_contract.cairo` containing the interface declaration 
 
 Now, invoke `call_increase_balance` with `BALANCE_CONTRACT` as the value of the `contract_address` argument. Make sure you replace `PROXY_CONTRACT` and `BALANCE_CONTRACT` with the addresses you got when you deployed the two contracts:
 
+[#invoke_call_increase_balance]
 [source,bash]
 ----
 starknet invoke \
@@ -67,6 +70,7 @@ Wait until the transaction is added to a block, and then check the balance using
 
 . Directly through `BALANCE_CONTRACT`
 +
+[#calling_contracts_get_balance_a]
 [source,bash]
 ----
 starknet call \
@@ -76,6 +80,7 @@ starknet call \
 ----
 . Indirectly through `PROXY_CONTRACT`
 +
+[#calling_contracts_get_balance_b]
 [source,bash]
 ----
 starknet call \
@@ -92,6 +97,7 @@ Both commands should return `10000`.
 
 You can get the current contract’s address by using the `get_contract_address()` library function.
 
+[#get_contract_address]
 [source,cairo]
 ----
 from starkware.starknet.common.syscalls import (
@@ -116,6 +122,7 @@ Note that a library call is very similar to Ethereum’s delegate call. The diff
 
 To perform a library call, use the contract interface as above, but prepend `library_call_` to the function name and pass a class hash instead of a contract address.
 
+[#library_call_increase_balance]
 [source,cairo]
 ----
 // Define a local balance variable in our proxy contract.
@@ -140,6 +147,7 @@ Modify the file `proxy_contract.cairo` you created earlier by adding the code ab
 
 Next, declare a library class, in our case – the already compiled example balance contract.
 
+[#declare_balance_contract_class]
 [source,bash]
 ----
 starknet declare --contract balance_contract_compiled.json
@@ -147,6 +155,7 @@ starknet declare --contract balance_contract_compiled.json
 
 Denote the hash of this class by `BALANCE_CLASS_HASH`. Now, invoke `increase_my_balance`:
 
+[#invoke_increase_my_balance]
 [source,bash]
 ----
 starknet invoke \

@@ -1,12 +1,13 @@
 [id="more-cli-commands"]
 = More CLI commands
 
-[[get-transaction]]
+[#get-transaction]
 [id="get-transaction"]
 == get_transaction
 
 To get transaction information run the following:
 
+[#starknet_get_transaction]
 [source,bash]
 ----
 starknet get_transaction --hash TRANSACTION_HASH
@@ -14,6 +15,7 @@ starknet get_transaction --hash TRANSACTION_HASH
 
 The output should resemble:
 
+[#starknet_get_transaction_output]
 [source,json]
 ----
 {
@@ -23,14 +25,14 @@ The output should resemble:
     "transaction": {
         "calldata": [
             "0x1",
-            "0x39564c4f6d9f45a963a6dc8cf32737f0d51a08e446304626173fd838bd70e1c",
+            "$[INTRO_CONTRACT_ADDRESS_TRIMMED]",
             "0x362398bec32bc0ebb411203221a35a0301193a96f317ebe5e40be9f60d15320",
             "0x0",
             "0x1",
             "0x1",
             "0x4d2"
         ],
-        "contract_address": "0x78d796e87cfa496bffad27be9ed42f2709bd6e32a6366f842fdf38664a1412d",
+        "contract_address": "$[ACCOUNT_ADDRESS_TRIMMED]",
         "max_fee": "0x0",
         "nonce": "0x3",
         "signature": [
@@ -58,12 +60,13 @@ It may also include each of the following optional fields (according to the tran
 * `transaction_index` – The index of the transaction within the block containing it.
 * `transaction_failure_reason` – The reason for the transaction failure.
 
-[[get-transaction-receipt]]
+[#get-transaction-receipt]
 [id="get-transaction-receipt"]
 == get_transaction_receipt
 
 Transaction receipt contains execution information, such as L1\<\->L2 interaction and consumed resources, in addition to its block information, similar to `get_transaction`. To get the transaction’s receipt, run the following:
 
+[#starknet_get_transaction_receipt]
 [source,bash]
 ----
 starknet get_transaction_receipt --hash TRANSACTION_HASH
@@ -71,6 +74,7 @@ starknet get_transaction_receipt --hash TRANSACTION_HASH
 
 The output should resemble:
 
+[#starknet_get_transaction_receipt_output]
 [source,json]
 ----
 {
@@ -109,7 +113,7 @@ The result contains (in addition to `get_transaction` fields):
 * `l1_to_l2_consumed_message` – The consumed message, in case the transaction was sent from L1.
 * `execution_resources` – Resources consumed by the transaction execution.
 
-[[get-transaction-trace]]
+[#get-transaction-trace]
 [id="get-transaction-trace"]
 == get_transaction_trace
 
@@ -117,6 +121,7 @@ Transaction trace contains execution information in a nested structure of calls;
 
 To get the transaction’s trace, run the following:
 
+[#starknet_get_transaction_trace]
 [source,bash]
 ----
 starknet get_transaction_trace --hash TRANSACTION_HASH
@@ -124,6 +129,7 @@ starknet get_transaction_trace --hash TRANSACTION_HASH
 
 The output should resemble:
 
+[#starknet_get_transaction_trace_output]
 [source,json]
 ----
 {
@@ -131,7 +137,7 @@ The output should resemble:
         "call_type": "CALL",
         "calldata": [
             "0x1",
-            "0x39564c4f6d9f45a963a6dc8cf32737f0d51a08e446304626173fd838bd70e1c",
+            "$[INTRO_CONTRACT_ADDRESS_TRIMMED]",
             "0x15511cc3694f64379908437d6d64458dc76d02482052bfb8a5b33a72c054c77",
             "0x0",
             "0x2",
@@ -205,6 +211,7 @@ Note that with the `--estimate_fee` flag, the state of the contracts does not ch
 
 To estimate the fee of a given transaction run the following:
 
+[#starknet_estimate_fee]
 [source,bash]
 ----
 starknet invoke \
@@ -217,6 +224,7 @@ starknet invoke \
 
 The output should resemble:
 
+[#starknet_estimate_fee_output]
 [source,bash]
 ----
 The estimated fee is: 756800000000000 WEI (0.000757 ETH).
@@ -233,6 +241,7 @@ Note that with the `--simulate` flag, as with `--estimate_fee`, the state of the
 
 To simulate the execution of a given transaction run the following:
 
+[#starknet_estimate_fee_output]
 [source,bash]
 ----
 starknet invoke \
@@ -245,6 +254,7 @@ starknet invoke \
 
 The output should resemble:
 
+[#starknet_simulate_transaction_output]
 [source,json]
 ----
 The estimated fee is: 756800000000000 WEI (0.000757 ETH).
@@ -256,7 +266,7 @@ Gas price: 100000000000 WEI
         "call_type": "CALL",
         "calldata": [
             "0x1",
-            "0x39564c4f6d9f45a963a6dc8cf32737f0d51a08e446304626173fd838bd70e1c",
+            "$[INTRO_CONTRACT_ADDRESS_TRIMMED]",
             "0x362398bec32bc0ebb411203221a35a0301193a96f317ebe5e40be9f60d15320",
             "0x0",
             "0x1",
@@ -264,8 +274,8 @@ Gas price: 100000000000 WEI
             "0x4d2"
         ],
         "caller_address": "0x0",
-        "class_hash": "0x74acbf20e655c80c4fa16e3574489073e0093fd8b386d9614ab2d6cf5b866bf",
-        "contract_address": "0x78d796e87cfa496bffad27be9ed42f2709bd6e32a6366f842fdf38664a1412d",
+        "class_hash": "$[ACCOUNT_CLASS_HASH]",
+        "contract_address": "$[ACCOUNT_ADDRESS_TRIMMED]",
         "entry_point_type": "EXTERNAL",
         "events": [],
         "execution_resources": {
@@ -290,7 +300,7 @@ Gas price: 100000000000 WEI
         "call_type": "CALL",
         "calldata": [
             "0x1",
-            "0x39564c4f6d9f45a963a6dc8cf32737f0d51a08e446304626173fd838bd70e1c",
+            "$[INTRO_CONTRACT_ADDRESS_TRIMMED]",
             "0x362398bec32bc0ebb411203221a35a0301193a96f317ebe5e40be9f60d15320",
             "0x0",
             "0x1",
@@ -298,8 +308,8 @@ Gas price: 100000000000 WEI
             "0x4d2"
         ],
         "caller_address": "0x0",
-        "class_hash": "0x74acbf20e655c80c4fa16e3574489073e0093fd8b386d9614ab2d6cf5b866bf",
-        "contract_address": "0x78d796e87cfa496bffad27be9ed42f2709bd6e32a6366f842fdf38664a1412d",
+        "class_hash": "$[ACCOUNT_CLASS_HASH]",
+        "contract_address": "$[ACCOUNT_ADDRESS_TRIMMED]",
         "entry_point_type": "EXTERNAL",
         "events": [],
         "execution_resources": {
@@ -318,7 +328,7 @@ Gas price: 100000000000 WEI
 }
 ----
 
-[[get-code]]
+[#get-code]
 [id="get-code"]
 == get_code
 
@@ -326,6 +336,7 @@ Once the `deploy` transaction is accepted on-chain, you will be able to see the 
 
 To get the contract at a specific address, run the following command:
 
+[#starknet_get_code]
 [source,bash]
 ----
 starknet get_code --contract_address ${CONTRACT_ADDRESS}
@@ -333,6 +344,7 @@ starknet get_code --contract_address ${CONTRACT_ADDRESS}
 
 The output should resemble:
 
+[#starknet_get_code_output]
 [source,json]
 ----
 {
@@ -359,12 +371,13 @@ The output should resemble:
 }
 ----
 
-[[get-class-by-hash]]
+[#get-class-by-hash]
 [id="get-class-by-hash"]
 == get_class_by_hash
 
 To get the full class compatible with a specific hash, run the following command:
 
+[#starknet_get_class_by_hash]
 [source,bash]
 ----
 starknet get_class_by_hash --class_hash CLASS_HASH
@@ -372,6 +385,7 @@ starknet get_class_by_hash --class_hash CLASS_HASH
 
 The output should resemble:
 
+[#starknet_get_class_by_hash_output]
 [source,json]
 ----
 {
@@ -394,12 +408,13 @@ The output should resemble:
 }
 ----
 
-[[get-full-contract]]
+[#get-full-contract]
 [id="get-full-contract"]
 == get_full_contract
 
 To get the full contract class of a contract at a specific address, run the following command:
 
+[#starknet_get_full_contract]
 [source,bash]
 ----
 starknet get_full_contract --contract_address ${CONTRACT_ADDRESS}
@@ -407,6 +422,7 @@ starknet get_full_contract --contract_address ${CONTRACT_ADDRESS}
 
 The output should resemble:
 
+[#starknet_get_full_contract_output]
 [source,json]
 ----
 {
@@ -429,12 +445,13 @@ The output should resemble:
 }
 ----
 
-[[get-class-hash-at]]
+[#get-class-hash-at]
 [id="get-class-hash-at"]
 == get_class_hash_at
 
 To get the hash of a contract at a specific address, run the following command:
 
+[#starknet_get_class_hash_at]
 [source,bash]
 ----
 starknet get_class_hash_at --contract_address ${CONTRACT_ADDRESS}
@@ -442,17 +459,19 @@ starknet get_class_hash_at --contract_address ${CONTRACT_ADDRESS}
 
 The output should resemble:
 
+[#starknet_get_class_hash_at_output]
 [source,bash]
 ----
 0x2951dd06d31f492e8ed1e91da115dbcd3ffd7c688f39b4878db99d86995e4c
 ----
 
-[[get-block]]
+[#get-block]
 [id="get-block"]
 == get_block
 
 Instead of querying a specific contract or transaction, you may want to query an entire block and examine the transactions contained within it. To do this, run the following:
 
+[#starknet_get_block]
 [source,bash]
 ----
 starknet get_block --number BLOCK_NUMBER
@@ -460,6 +479,7 @@ starknet get_block --number BLOCK_NUMBER
 
 The output should resemble:
 
+[#starknet_get_block_output]
 [source,json]
 ----
 {
@@ -468,7 +488,7 @@ The output should resemble:
     "gas_price": "0x174876e800",
     "parent_block_hash": "0x19bbfaf06c332eda3d6a0f3bf45583d4312707435e8df265a02524853c7491e",
     "sequencer_address": "0x310959e4d55cfe4712291a5f9787893fb392d1ffb96905aba549b21e91e9fc9",
-    "starknet_version": "0.10.2",
+    "starknet_version": "$[VERSION]",
     "state_root": "079354de0075c5c1f2a6af40c7dd70a92dc93c68b54ecc327b61c8426fea177c",
     "status": "ACCEPTED_ON_L2",
     "timestamp": 105,
@@ -521,12 +541,13 @@ The result contains:
 
 To query the pending block, simply pass `--number=pending`. To query a block by hash, use `--hash` instead. Note that at most one of these arguments can be given.
 
-[[get-nonce]]
+[#get-nonce]
 [id="get-nonce"]
 == get_nonce
 
 You can retrieve the nonce of a contract (usually, an account contract) using the following command:
 
+[#starknet_get_nonce]
 [source,bash]
 ----
 starknet get_nonce --contract_address ${ACCOUNT_ADDRESS}
@@ -534,12 +555,13 @@ starknet get_nonce --contract_address ${ACCOUNT_ADDRESS}
 
 Note that the nonce returned by this command is advanced only once the transaction reaches the pending (or later) state.
 
-[[get-block-traces]]
+[#get-block-traces]
 [id="get-block-traces"]
 == get_block_traces
 
 Instead of querying a specific transaction, you may want to query an entire block and examine the traces of all the transactions contained within it (see `get_transaction_trace` above). To do this, run the following:
 
+[#starknet_get_block_traces]
 [source,bash]
 ----
 starknet get_block_traces --number BLOCK_NUMBER
@@ -547,6 +569,7 @@ starknet get_block_traces --number BLOCK_NUMBER
 
 The output should resemble:
 
+[#starknet_get_block_traces_output]
 [source,json]
 ----
 {
@@ -606,12 +629,13 @@ The output should resemble:
 }
 ----
 
-[[get-state-update]]
+[#get-state-update]
 [id="get-state-update"]
 == get_state_update
 
 You can use the following command to get the state changes in a specific block (for example, what storage cells have changed):
 
+[#starknet_get_state_update]
 [source,bash]
 ----
 starknet get_state_update --block_number BLOCK_NUMBER
@@ -619,6 +643,7 @@ starknet get_state_update --block_number BLOCK_NUMBER
 
 The output should resemble:
 
+[#starknet_get_state_update_output]
 [source,json]
 ----
 {
@@ -660,7 +685,8 @@ To query the last block, simply remove the `--block_number` argument. To query a
 
 Other than querying the contract’s code, you may also want to query the contract’s storage at a specific key. To do so, you first need to understand which key is of interest to you. As you saw before, StarkNet introduces a new primitive, which is xref:intro.adoc#storage-var[storage variables]. Each storage variable is mapped to a storage key (a field element). To compute this key, run the following Python code:
 
-[source,cairo]
+[#get_variable_key]
+[source,python]
 ----
 from starkware.starknet.public.abi import get_storage_var_address
 
@@ -670,13 +696,15 @@ print(f'Balance key: {balance_key}')
 
 You should get:
 
-[source,bash]
+[#get_variable_key_output]
+[source,python]
 ----
 Balance key: 916907772491729262376534102982219947830828984996257231353398618781993312401
 ----
 
 Now, you can query the balance using:
 
+[#starknet_get_storage_at]
 [source,bash]
 ----
 starknet get_storage_at \
@@ -686,6 +714,7 @@ starknet get_storage_at \
 
 Using the same contract we have used so far, you should get:
 
+[#starknet_get_storage_at_output]
 [source,bash]
 ----
 0x4d2
